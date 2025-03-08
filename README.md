@@ -14,15 +14,15 @@ bitIndex -> 32 to 1
   Now when we sort for position 32 - 1 -> we will sort separately for window 0 to k and k to n-1. so that the sort order from previous bit position is maintained.
 
   pseudo code ->
-Let arr be the array of n 32 bit unisgned positive integers with starting index as 0 (integer are represented as 32 bit unsigned - the first bit doesnt represnt the sign of the number
-Let list be a linked list with initial value 0,n 
+Let arr be the array of n 32 bit unisgned positive integers with starting index as 0 (integer are represented as 32 bit unsigned - the first bit doesnt represent the sign of the number
+Let list be a linked list with initial elements 0,n 
 For k = 32 to 1 {
   ListNode start = list.first()
   ListNode end  = start.next()
   While ( end != null)
   {
      int p = Sort(arr, start.val, end.val - 1, k) // sort element of arr from index start to end using bit values at bit position k
-      Sort will return a number p such that all elements from start to p have 0 as kth bit and all elements from p+1 to end have 1 at kth bit position.
+     // Sort will return a number p such that all elements from start to p - 1 have 0 as kth bit and all elements from p to end have 1 at kth bit position.
     if(p >= start && p <= end) {
          start.insertafter(p); // Insert number p in list after node start
     }
