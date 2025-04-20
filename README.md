@@ -1,16 +1,42 @@
 # algorithm-sicksort
-This algorithm sort integers by taking advantage of the binary representation of integers.
-Lets suppose we have an array of n integers with each integer represented as 32 bit number.
-From the most significant bit to the least significant bit we sort the array for every bit position.
-We sort those elements that belong in one window only. We store the window indexes in a list.
-Let bitIndex be current bit position for which we are sorting the array.
-bitIndex -> 32 to 1
-  when bitIndex is 32
-  for all numbers in the array calculate the bit value at position 32. It can be either 0 or 1. Sort the array from indexes 0 to n -1
-  according to this bit value which is equivalent to sorting a array with only 0s and 1s. It will take O(n) time.
-  Record the index of the first element that has 1 at 32th bit position. Add that index to the window list. This way we have 2 windows 0 to k, k to n - 1.
-  elements from index 0 to k has 0s at 32 bit position and elements from index k to n - 1 has 1s.
-  Now when we sort for position 32 - 1 -> we will sort separately for window 0 to k and k to n-1. so that the sort order from previous bit position is maintained.
+This sorting algorithm leverages the binary representation of 32-bit unsigned integers to sort an array in linear time complexity per bit. The core idea is to sort the array bit by bit, starting from the most significant bit (MSB) to the least significant bit (LSB), i.e., from bit position 32 down to 1.
+
+At each bit position k, the array is partitioned into windows—subarrays—based on previous bit-level divisions. Initially, the entire array is considered a single window. For each window, the elements are stably sorted based on the k-th bit (1-indexed from the MSB). This step effectively performs a stable binary radix sort over the bits.
+
+For every sorting operation at a bit position k, the partition index (where elements with bit 0 end and bit 1 begin) is recorded. These indices define new sub-windows for the next iteration (bit k-1), ensuring previous sort orders are preserved.
+
+A window is a contiguous subarray (range of consecutive indices) within the array. At every bit position k, the array is partitioned into one or more non-overlapping windows. The array maintains sorted order by higher (more significant) bits.
+We sort only within each window, so that previously sorted bits are preserved and stability is maintained.
+ Why Can We Sort Only Within Windows?
+When sorting at a given bit position k, the sort must preserve the ordering established by previous (more significant) bits.
+
+Since elements in different windows already differ in more significant bits, their relative positions should not be changed.
+
+Therefore, we only sort within each window — the boundaries between windows are determined by earlier bit partitions.
+
+Each sort step for a window uses a binary partitioning logic:
+Traverse the window.
+Move all elements with 0 in the k-th bit to the front.
+Return the index p, which is the first index where a 1 appears at bit position k.
+
+
+
+High-Level Steps:
+Initialize a linked list of window boundaries with [0, n].
+
+For each bit index from 32 down to 1:
+
+For every window defined by consecutive nodes in the list:
+
+Partition elements in that window based on the current bit.
+
+Record the partition index if both 0 and 1 values are present.
+
+Update the window list with this new boundary.
+
+The array becomes fully sorted after processing all 32 bits.
+
+
 
   pseudo code ->
 Let arr be the array of n 32 bit unisgned positive integers with starting index as 0 (integer are represented as 32 bit unsigned - the first bit doesnt represent the sign of the number
