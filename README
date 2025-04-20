@@ -183,4 +183,10 @@ Function GetBit(number: int, bitIndex: int) -> int:
     // Get the bit value at bitIndex (1 = MSB, 32 = LSB)
     Return (number >> (32 - bitIndex)) & 1
 
-  
+
+Summary
+Time Complexity : O(n) (32 linear passes)
+Space Complexity : O(log n) recursion stack (worst case)
+Stable : Yes
+In-place : Yes
+Best for : Large arrays of integers with uniform bit width
