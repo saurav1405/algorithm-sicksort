@@ -38,40 +38,7 @@ The array becomes fully sorted after processing all 32 bits.
 
 
 
-  pseudo code ->
-Let arr be the array of n 32 bit unisgned positive integers with starting index as 0 (integer are represented as 32 bit unsigned - the first bit doesnt represent the sign of the number
-Let list be a linked list with initial elements 0,n 
-For k = 32 to 1 {
-  ListNode start = list.first()
-  ListNode end  = start.next()
-  While ( end != null)
-  {
-     int p = Sort(arr, start.val, end.val - 1, k) // sort element of arr from index start to end using bit values at bit position k
-     // Sort will return a number p such that all elements from start to p - 1 have 0 as kth bit and all elements from p to end have 1 at kth bit position.
-    if(p >= start && p <= end) {
-         start.insertafter(p); // Insert number p in list after node start
-    }
-     start = end.next();
-     end = start == null ? null : start.next();
-} 
-
-// Sort method will sort the numbers between index start and end on the basis of values at kth bit position
-int Sort(arr, start, end, k) {
-  int p = start - 1;
-  for i = start to end {
-    int bitVal = getBitValue(arr[i], k);
-    if(bitVal == 0) {
-      p = p + 1;
-      swap(arr[i], arr[p]);
-    }
-   }
-    return p;
-}
-int getBitValue(int number, int bitPosition) - will give the bit value of a integer at particular position in O(1) time
-
-class ListNode {
-int val;
-ListNode next;
-insertAfter(int val) // create aa ListNode with value val and insert it after the ListNode object on whcih it is called
+Pseudocode
+<pre lang="plaintext"><code>Function RecursiveMSBRadixSort(arr: array of unsigned 32-bit integers): MSBRadixSort(arr, 0, length(arr) - 1, 32) Function MSBRadixSort(arr: array, start: int, end: int, bitIndex: int): If start >= end or bitIndex < 1: return mid = PartitionByBit(arr, start, end, bitIndex) // Recursively sort the 0-bit group and 1-bit group MSBRadixSort(arr, start, mid - 1, bitIndex - 1) MSBRadixSort(arr, mid, end, bitIndex - 1) Function PartitionByBit(arr: array, start: int, end: int, bitIndex: int) -> int: p = start - 1 For i from start to end: bitVal = GetBit(arr[i], bitIndex) If bitVal == 0: p = p + 1 Swap arr[i], arr[p] Return p + 1 Function GetBit(number: int, bitIndex: int) -> int: // BitIndex is 1-based from MSB (bit 32) to LSB (bit 1) Return (number >> (32 - bitIndex)) & 1 </code></pre>
   
   
