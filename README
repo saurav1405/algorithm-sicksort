@@ -39,6 +39,78 @@ The array becomes fully sorted after processing all 32 bits.
 
 
 Pseudocode
-<pre lang="plaintext"><code>Function RecursiveMSBRadixSort(arr: array of unsigned 32-bit integers): MSBRadixSort(arr, 0, length(arr) - 1, 32) Function MSBRadixSort(arr: array, start: int, end: int, bitIndex: int): If start >= end or bitIndex < 1: return mid = PartitionByBit(arr, start, end, bitIndex) // Recursively sort the 0-bit group and 1-bit group MSBRadixSort(arr, start, mid - 1, bitIndex - 1) MSBRadixSort(arr, mid, end, bitIndex - 1) Function PartitionByBit(arr: array, start: int, end: int, bitIndex: int) -> int: p = start - 1 For i from start to end: bitVal = GetBit(arr[i], bitIndex) If bitVal == 0: p = p + 1 Swap arr[i], arr[p] Return p + 1 Function GetBit(number: int, bitIndex: int) -> int: // BitIndex is 1-based from MSB (bit 32) to LSB (bit 1) Return (number >> (32 - bitIndex)) & 1 </code></pre>
-  
+Function IterativeMSBRadixSort(arr: array of unsigned 32-bit integers):
+    n = length(arr)
+    windowList = new LinkedList()
+    windowList.append(0)
+    windowList.append(n)
+
+    For bitIndex from 32 down to 1:
+        node = windowList.head
+
+        While node and node.next:
+            start = node.value
+            end = node.next.value - 1
+
+            partitionIndex = PartitionByBit(arr, start, end, bitIndex)
+
+            // Only insert new window if both 0s and 1s exist in this window
+            If start <= partitionIndex <= end:
+                node.insertAfter(partitionIndex)
+
+            node = node.next.next if node.next else null
+
+
+Function PartitionByBit(arr: array, start: int, end: int, bitIndex: int) -> int:
+    p = start - 1
+    For i from start to end:
+        bitVal = GetBit(arr[i], bitIndex)
+        If bitVal == 0:
+            p = p + 1
+            Swap arr[i], arr[p]
+    Return p + 1
+
+
+Function GetBit(number: int, bitIndex: int) -> int:
+    // Bit positions are 1-based from MSB to LSB (32 to 1)
+    Return (number >> (32 - bitIndex)) & 1
+
+
+Class ListNode:
+    value: int
+    next: ListNode
+
+    Method insertAfter(val: int):
+        newNode = new ListNode(val)
+        newNode.next = this.next
+        this.next = newNode
+
+
+Class LinkedList:
+    head: ListNode
+
+    Method append(val: int):
+        if head is null:
+            head = new ListNode(val)
+        else:
+            node = head
+            while node.next:
+                node = node.next
+            node.next = new ListNode(val)
+
+
+Why This Works:
+Bitwise partitioning from MSB to LSB ensures correct order.
+
+Windows are consecutive and non-overlapping, so we avoid mixing elements that differ in more significant bits.
+
+Sorting within each window maintains previous orderings, providing a stable and correct sort.
+
+Time complexity remains O(n) due to a constant number (32) of passes.
+
+Time Complexity : O(n) for 32-bit integers
+Space Complexity : O(n) for window list
+In-Place : Yes
+Stable  Yes
+
   
