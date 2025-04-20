@@ -1,0 +1,50 @@
+# Extend algorithm to Floating-Point Numbers and Signed Integers
+Handling Signed Integers (Using Sign Bit Partitioning)
+The MSB radix sort algorithm can be directly extended to sort signed 32-bit integers by making use of the sign bit (the most significant bit):
+
+In 2’s complement representation (used in most systems), the sign bit is:
+
+0 for non-negative numbers (≥ 0)
+
+1 for negative numbers (< 0)
+
+🔧 Extension Strategy
+Start sorting from the most significant bit (bit 32) — which is the sign bit.
+
+During the first pass (bit 32), partition the array into two windows:
+
+One with sign bit = 1 → contains all negative numbers.
+
+One with sign bit = 0 → contains all non-negative numbers.
+
+This results in two windows:
+
+Negative numbers (unsorted) — left side of the array.
+
+Non-negative numbers (unsorted) — right side of the array.
+
+Continue the sorting process recursively or iteratively within each window, from bit 31 down to bit 1.
+
+
+Support for Floating-Point Numbers
+Floating-point numbers (like float or double) follow the IEEE-754 standard and cannot be directly sorted 
+using bitwise radix sort. However, we can extend the algorithm to handle floats by reinterpreting their
+bit patterns into sortable unsigned integers:
+uint32_t floatToSortableBits(float f) {
+    uint32_t bits = reinterpret_cast<uint32_t&>(f);
+    return (bits >> 31) ? ~bits : (bits ^ 0x80000000);
+}
+This transformation ensures that the resulting bit pattern:
+
+Preserves the total ordering of floating-point numbers (including negative values and 0.0).
+
+Makes the data compatible with the MSB radix sort logic.
+
+After sorting, convert the integers back to floats using the inverse of the above transformation.
+Summary: 
+Input Type : 32-bit IEEE-754 float
+Time Complexity: O(n) (fixed 32-bit keys × 32 passes)
+Space Complexity : O(n) (for transformed integer buffer)
+In-place : No (unless sorting buffer is reused)
+Stable : Yes
+
