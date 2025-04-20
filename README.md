@@ -1,4 +1,4 @@
-# algorithm-sicksort
+# MSB-Based Bitwise Radix Sort (with Windowing)
 This sorting algorithm leverages the binary representation of 32-bit unsigned integers to sort an array in linear time complexity per bit. The core idea is to sort the array bit by bit, starting from the most significant bit (MSB) to the least significant bit (LSB), i.e., from bit position 32 down to 1.
 
 At each bit position k, the array is partitioned into windows—subarrays—based on previous bit-level divisions. Initially, the entire array is considered a single window. For each window, the elements are stably sorted based on the k-th bit (1-indexed from the MSB). This step effectively performs a stable binary radix sort over the bits.
